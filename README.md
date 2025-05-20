@@ -1,81 +1,21 @@
-🌟 Bader | Community-Driven Problem Solving Platform
-Bader is a web platform that empowers local communities to report public issues in their neighborhoods (e.g., broken roads, garbage piles, damaged infrastructure), and helps transform these reports into actionable projects that the public can volunteer for, donate to, or support through local businesses.
+Bader Project
+Bader is an innovative online platform designed to improve neighborhoods by enabling residents to report issues, coordinate volunteer efforts, and track the resolution of community problems. The platform connects residents, volunteers, and local authorities to streamline the process of addressing urban challenges such as infrastructure damage, public safety concerns, and general neighborhood maintenance.
 
-🧩 Project Idea
-Many neighborhoods suffer from common issues such as:
+Features
+Issue Reporting: Residents can report neighborhood issues like broken streetlights, unsafe areas, or damaged infrastructure.
 
-Damaged or unsafe roads
+Volunteer Coordination: Volunteers can sign up, choose issues to work on
 
-Overflowing trash or random dumping
+Real-Time Tracking: The platform allows users to track the status of reported issues and monitor the progress of repairs or solutions.
+.
+User-Friendly Interface: Designed with Next.js and Tailwind CSS for responsive and intuitive navigation.
+Technologies Used
+Frontend: Next.js (React framework)
+Styling: Tailwind CSS
+Backend: Node.js & MongoDB
 
-Broken street lights
-
-Unmaintained parks or sidewalks
-
-Bader allows citizens to submit reports, and the system transforms those into community-led projects. People and organizations can join the solution through:
-
-🧑‍🤝‍🧑 Volunteering
-
-💰 Donations
-
-🏢 Company sponsorships
-
-Together, we take action to make our cities better.
-
-⚙️ Key Features
-📍 Easy Report Submission: Users can submit a report with location, description, and optional image.
-
-🔁 Convert Reports to Projects: Admins review reports and turn them into actionable projects.
-
-🤝 Community Support: Projects are open for public volunteering or donations.
-
-🏢 Business Sponsorship: Companies can join as official supporters of selected projects.
-
-📊 Project Status Tracking: Each report/project has a status (e.g., Ongoing – Solved – Awaiting Support).
-
-🧑‍💼 User Dashboard: Users can track their reports, contributions, and volunteer efforts.
-
-🛠️ Admin Panel: For managing reports, reviewing support, and updating project statuses.
-
-🚀 How It Works
-For Regular Users:
-Sign up or log in.
-
-Submit a new report.
-
-Fill in location, description, and optional image.
-
-Track your report's status.
-
-Join or support projects by volunteering or donating.
-
-For Businesses:
-Register as a sponsor.
-
-Choose projects to support.
-
-Make a real difference in your local community.
-
-📦 Tech Stack
-Frontend: Next.js + Tailwind CSS
-
-Backend: Node.js + Express.js
-
-Database: MongoDB
-
-Authentication: JWT
-
-Maps & Location Services: (e.g., Mapbox or Google Maps API)
-
-👐 Contributing
-Want to contribute to the project? You’re more than welcome!
-You can:
-
-Open issues for bugs or feature requests.
-
-Submit pull requests to add or improve functionality.
-
-Help improve UX/UI or suggest new ideas.
-
-🙌 Let's Make a Difference
-Bader – Because real change starts with one step.
+Links
+Figma Design: Figma Link
+Trello Board: Trello Link
+brife Board : brife Link
+Decumtion Board :Decumtion Board
