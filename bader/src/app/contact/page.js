@@ -231,7 +231,6 @@ export default function Contact() {
                       placeholder="اكتب رسالتك هنا..."
                     />
                   </div>
-
                   <motion.button
                     type="submit"
                     className="w-full py-3 px-6 bg-[#fa9e1b] hover:bg-[#fbb042] text-[#31124b] font-bold rounded-lg shadow-lg transition-all duration-300 text-lg font-arabic"
