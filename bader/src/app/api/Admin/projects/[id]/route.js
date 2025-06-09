@@ -3,7 +3,10 @@ import Project from "@/models/Project";
 import { NextResponse } from "next/server";
 
 // تعديل مشروع موجود
-export async function PUT(req, { params }) {
+// export async function PUT(req, { params }) {
+export async function PUT(req, context) {
+  const { params } = context;
+  const id = params.id;
   await dbConnect();
 
   try {
@@ -43,7 +46,10 @@ export async function PUT(req, { params }) {
 }
 
 // حذف مشروع
-export async function DELETE(_, { params }) {
+// export async function DELETE(_, { params }) {
+export async function DELETE(req, context) {
+  const { params } = context;
+  const id = params.id;
   await dbConnect();
 
   try {
