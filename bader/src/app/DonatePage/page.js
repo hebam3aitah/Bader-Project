@@ -22,8 +22,12 @@ import { FaPaypal } from "react-icons/fa";
 import { useRef } from "react";
 import Script from "next/script";
 import Swal from "sweetalert2";
+import React, { Suspense } from 'react';
 
 export default function DonatePage({ organizationId = null }) {
+  
+  
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
@@ -354,6 +358,8 @@ export default function DonatePage({ organizationId = null }) {
 
   if (loading) {
     return (
+          <Suspense fallback={<div>Loading donation page...</div>}>
+
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="spinner-border text-[#31124b]" role="status">
@@ -362,6 +368,8 @@ export default function DonatePage({ organizationId = null }) {
           <p className="mt-3 text-[#31124b]">جاري تحميل بيانات التبرع...</p>
         </div>
       </div>
+          </Suspense>
+
     );
   }
 
@@ -384,6 +392,8 @@ export default function DonatePage({ organizationId = null }) {
   }
 
   return (
+        <Suspense fallback={<div>Loading donation page...</div>}>
+
     <div dir="rtl" className="min-h-screen">
       <Head>
         <title>التبرع</title>
@@ -894,5 +904,6 @@ export default function DonatePage({ organizationId = null }) {
         </div>
       </main>
     </div>
+     </Suspense>
   );
 }
