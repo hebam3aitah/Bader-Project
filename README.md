@@ -1,4 +1,4 @@
-# 🌟 Bader Project
+# Bader Project
 
 **Bader** is an innovative online platform designed to improve neighborhoods by enabling residents to report issues, coordinate volunteer efforts, and track the resolution of community problems. The platform connects residents, volunteers, and local authorities to streamline the process of addressing urban challenges such as infrastructure damage, public safety concerns, and general neighborhood maintenance.
 
