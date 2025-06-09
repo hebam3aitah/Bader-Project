@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
           <Toaster position="top-right" reverseOrder={false} />
           {!shouldHideNavbar() && <Navbar />}
           <main>{children}</main>
-                      <VolunteerChatFloatingWrapper />
+          <VolunteerChatFloatingWrapper />
 
           {!shouldHideFooter() && <Footer />}
             <VolunteerChatFloatingWrapper />

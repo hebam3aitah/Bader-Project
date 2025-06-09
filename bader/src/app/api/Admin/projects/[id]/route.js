@@ -20,7 +20,7 @@ export async function PUT(req, { params }) {
         volunteerCount: body.volunteerCount,
         volunteerHours: body.volunteerHours,
         images: body.images,
-        locationName: body.locationName, // ✅ أضيفي هذا السطر
+        locationName: body.locationName,    
       },
       { new: true }
     );

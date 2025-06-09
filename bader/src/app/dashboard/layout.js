@@ -124,8 +124,7 @@ export default function DashboardLayout({ children }) {
         <div className="flex justify-center items-center mb-8 h-20">
           <div className="w-32 h-16 rounded flex items-center justify-center">
             <Link href="/" className="flex items-center ml-2 gap-1">
-              <img src="/images/logo.png" alt="بادر" className="h-15 w-auto" />
-              <span className="text-2xl font-bold text-white">بادر</span>
+              <img src="/images/logo3.png" alt="بادر" className="h-15 w-auto" />
             </Link>
           </div>
         </div>

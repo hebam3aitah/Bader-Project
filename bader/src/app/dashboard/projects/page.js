@@ -1,7 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FiLoader, FiPlus } from "react-icons/fi";
+import {
+  FiLoader,
+  FiPlus,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
 import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -10,7 +15,8 @@ import Sortable from "sortablejs";
 import Swal from "sweetalert2";
 
 export default function AdminProjectsPage() {
-  const [projects, setProjects] = useState([]);
+  const [allProjects, setAllProjects] = useState([]); // جميع المشاريع
+  const [projects, setProjects] = useState([]); // المشاريع المعروضة حاليًا
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
   const [editingProject, setEditingProject] = useState(null);
@@ -24,10 +30,14 @@ export default function AdminProjectsPage() {
     images: [],
     mainImage: null,
     category: "",
-    locationName: "", // ✅ ضيفي هذا السطر
+    locationName: "",
   });
   const [saving, setSaving] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectsPerPage] = useState(6); // عدد المشاريع في كل صفحة
 
   const fetchProjects = async () => {
     try {
@@ -35,14 +45,24 @@ export default function AdminProjectsPage() {
       const res = await axios.get("/api/Admin/projects", {
         params: statusFilter !== "all" ? { status: statusFilter } : {},
       });
-      setProjects(res.data);
-      console.log(res.data);
+      const fetchedProjects = res.data.projects || res.data;
+      setAllProjects(fetchedProjects);
+      console.log(fetchedProjects);
     } catch {
       toast.error("فشل في تحميل المشاريع");
     } finally {
       setLoading(false);
     }
   };
+
+  // تطبيق pagination على البيانات المحملة
+  const applyPagination = () => {
+    const startIndex = (currentPage - 1) * projectsPerPage;
+    const endIndex = startIndex + projectsPerPage;
+    const paginatedProjects = allProjects.slice(startIndex, endIndex);
+    setProjects(paginatedProjects);
+  };
+
   useEffect(() => {
     axios
       .get("/api/categories")
@@ -67,9 +87,124 @@ export default function AdminProjectsPage() {
       });
     }
   }, [editForm.images]);
+
+  useEffect(() => {
+    setCurrentPage(1); // إعادة تعيين الصفحة إلى الأولى عند تغيير الفلتر
+  }, [statusFilter]);
+
   useEffect(() => {
     fetchProjects();
   }, [statusFilter]);
+
+  // تطبيق pagination عند تغيير الصفحة أو البيانات
+  useEffect(() => {
+    applyPagination();
+  }, [currentPage, allProjects]);
+
+  // Pagination calculations
+  const totalProjects = allProjects.length;
+  const totalPages = Math.ceil(totalProjects / projectsPerPage);
+  const startIndex = (currentPage - 1) * projectsPerPage + 1;
+  const endIndex = Math.min(currentPage * projectsPerPage, totalProjects);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const renderPagination = () => {
+    if (totalPages <= 1) return null;
+
+    const pageNumbers = [];
+    const maxVisiblePages = 5;
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return (
+      <div className="flex items-center justify-center mt-8 gap-2">
+        {/* Previous button */}
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={`flex items-center px-3 py-2 rounded-md transition-colors ${
+            currentPage === 1
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-white text-[#41225b] border border-gray-300 hover:bg-gray-50"
+          }`}
+        >
+          <FiChevronRight className="w-4 h-4" />
+          <span className="mr-1">السابق</span>
+        </button>
+
+        {/* First page if not visible */}
+        {startPage > 1 && (
+          <>
+            <button
+              onClick={() => handlePageChange(1)}
+              className="px-3 py-2 rounded-md bg-white text-[#41225b] border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              1
+            </button>
+            {startPage > 2 && <span className="px-2 text-gray-500">...</span>}
+          </>
+        )}
+
+        {/* Page numbers */}
+        {pageNumbers.map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`px-3 py-2 rounded-md transition-colors ${
+              page === currentPage
+                ? "bg-[#41225b] text-white"
+                : "bg-white text-[#41225b] border border-gray-300 hover:bg-gray-50"
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+
+        {/* Last page if not visible */}
+        {endPage < totalPages && (
+          <>
+            {endPage < totalPages - 1 && (
+              <span className="px-2 text-gray-500">...</span>
+            )}
+            <button
+              onClick={() => handlePageChange(totalPages)}
+              className="px-3 py-2 rounded-md bg-white text-[#41225b] border border-gray-300 hover:bg-gray-50 transition-colors"
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
+
+        {/* Next button */}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={`flex items-center px-3 py-2 rounded-md transition-colors ${
+            currentPage === totalPages
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-white text-[#41225b] border border-gray-300 hover:bg-gray-50"
+          }`}
+        >
+          <span className="ml-1">التالي</span>
+          <FiChevronLeft className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  };
 
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
@@ -122,14 +257,13 @@ export default function AdminProjectsPage() {
       images: project.images || [],
       mainImage: project.mainImage || project.images?.[0] || null,
       category: project.category?._id || project.category || "",
-      locationName: project.locationName || "", // ✅ ضيفي هذا السطر
+      locationName: project.locationName || "",
     });
   };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
 
-    // الحقول اللي لازم تتحول لأرقام
     const numericFields = [
       "donationTarget",
       "volunteerCount",
@@ -167,7 +301,7 @@ export default function AdminProjectsPage() {
   };
 
   const exportCSV = () => {
-    const csv = unparse(projects);
+    const csv = unparse(allProjects); // تصدير جميع المشاريع وليس المعروضة فقط
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
@@ -179,7 +313,8 @@ export default function AdminProjectsPage() {
     const doc = new jsPDF();
     autoTable(doc, {
       head: [["التصنيف", "الحالة", "التبرع", "المتطوعين", "الساعات"]],
-      body: projects.map((p) => [
+      body: allProjects.map((p) => [
+        // تصدير جميع المشاريع
         p.category,
         p.status,
         p.donationTarget,
@@ -205,7 +340,7 @@ export default function AdminProjectsPage() {
       try {
         await axios.delete(`/api/Admin/projects/${id}`);
         toast.success("تم حذف المشروع بنجاح");
-        fetchProjects(); // إعادة تحميل القائمة
+        fetchProjects();
       } catch (err) {
         console.error("Delete error:", err);
         toast.error("فشل في حذف المشروع");
@@ -231,6 +366,7 @@ export default function AdminProjectsPage() {
                   images: [],
                   mainImage: null,
                   category: "",
+                  locationName: "",
                 });
                 setShowAddForm(true);
                 setEditingProject(null);
@@ -279,6 +415,13 @@ export default function AdminProjectsPage() {
             </button>
           </div>
         </div>
+
+        {/* Projects count display */}
+        {!loading && (
+          <div className="mt-4 text-sm text-gray-600 text-center">
+            عرض {startIndex} - {endIndex} من {totalProjects} مشروع
+          </div>
+        )}
       </div>
 
       {loading ? (
@@ -286,114 +429,123 @@ export default function AdminProjectsPage() {
           <FiLoader className="animate-spin text-3xl text-[#fa9e1b]" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((p) => (
-            <div
-              key={p._id}
-              className="border rounded-lg p-0 bg-white shadow-md hover:shadow-lg transition overflow-hidden"
-            >
-              <div className="relative">
-                <img
-                  src={p.mainImage || p.images?.[0] || "/placeholder.png"}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#41225b] to-transparent p-3">
-                  <h3 className="font-bold text-lg text-white">
-                    {p.category.name}
-                  </h3>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((p) => (
+              <div
+                key={p._id}
+                className="border rounded-lg p-0 bg-white shadow-md hover:shadow-lg transition overflow-hidden"
+              >
+                <div className="relative">
+                  <img
+                    src={p.mainImage || p.images?.[0] || "/placeholder.png"}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#41225b] to-transparent p-3">
+                    <h3 className="font-bold text-lg text-white">
+                      {p.category.name}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        p.status === "completed"
+                          ? "bg-green-100 text-green-700"
+                          : p.status === "in-progress"
+                          ? "bg-[#fa9e1b] bg-opacity-20 text-[#ffffff]"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {p.status === "completed" && "مكتمل"}
+                      {p.status === "in-progress" && "قيد التنفيذ"}
+                      {p.status === "pending" && "قيد الانتظار"}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="bg-gray-50 p-2 rounded text-center">
+                      <p className="text-xs text-gray-500">التبرع المطلوب</p>
+                      <p className="font-bold text-[#41225b]">
+                        {p.donationTarget} دينار
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-2 rounded text-center">
+                      <p className="text-xs text-gray-500">التبرعات حاليا </p>
+                      <p className="font-bold text-[#41225b]">
+                        {p.donations} دينار
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-2 rounded text-center">
+                      <p className="text-xs text-gray-500">
+                        عدد المتطوعين المطلوب
+                      </p>
+                      <p className="font-bold text-[#41225b]">
+                        {p.volunteerCount}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-2 rounded text-center">
+                      <p className="text-xs text-gray-500">
+                        عدد المتطوعين حاليا
+                      </p>
+                      <p className="font-bold text-[#41225b]">
+                        {p.volunteers.length}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 justify-center border-t pt-3">
+                    <button
+                      onClick={() => handleEdit(p)}
+                      className="flex-1 py-2 text-[#41225b] font-medium hover:bg-gray-100 rounded transition-all flex items-center justify-center gap-1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
+                      </svg>
+                      تعديل
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p._id)}
+                      className="flex-1 py-2 text-red-600 font-medium hover:bg-red-50 rounded transition-all flex items-center justify-center gap-1"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      حذف
+                    </button>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
 
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      p.status === "completed"
-                        ? "bg-green-100 text-green-700"
-                        : p.status === "in-progress"
-                        ? "bg-[#fa9e1b] bg-opacity-20 text-[#ffffff]"
-                        : "bg-gray-100 text-gray-600"
-                    }`}
-                  >
-                    {p.status === "completed" && "مكتمل"}
-                    {p.status === "in-progress" && "قيد التنفيذ"}
-                    {p.status === "pending" && "قيد الانتظار"}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <div className="bg-gray-50 p-2 rounded text-center">
-                    <p className="text-xs text-gray-500">التبرع المطلوب</p>
-                    <p className="font-bold text-[#41225b]">
-                      {p.donationTarget} دينار
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-2 rounded text-center">
-                    <p className="text-xs text-gray-500">التبرعات حاليا </p>
-                    <p className="font-bold text-[#41225b]">
-                      {p.donations} دينار
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-2 rounded text-center">
-                    <p className="text-xs text-gray-500">عدد المتطوعين المطلوب</p>
-                    <p className="font-bold text-[#41225b]">
-                      {p.volunteerCount}
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-2 rounded text-center">
-                    <p className="text-xs text-gray-500">عدد المتطوعين حاليا</p>
-                    <p className="font-bold text-[#41225b]">
-                      {p.volunteers.length}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 justify-center border-t pt-3">
-                  <button
-                    onClick={() => handleEdit(p)}
-                    className="flex-1 py-2 text-[#41225b] font-medium hover:bg-gray-100 rounded transition-all flex items-center justify-center gap-1"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
-                    تعديل
-                  </button>
-                  <button
-                    onClick={() => handleDelete(p._id)}
-                    className="flex-1 py-2 text-red-600 font-medium hover:bg-red-50 rounded transition-all flex items-center justify-center gap-1"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
-                    حذف
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+          {/* Pagination Component */}
+          {renderPagination()}
+        </>
       )}
 
       {(editingProject || showAddForm) && (

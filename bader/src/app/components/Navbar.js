@@ -80,7 +80,7 @@ export default function Navbar() {
         <div className="flex h-18 items-center justify-between">
           {/* الشعار والاسم */}
           <Link href="/" className="flex items-center ml-2 gap-1">
-            <img src="/images/logo1.png" alt="بادر" className="h-15 w-auto" />
+            <img src="/images/logo3.png" alt="بادر" className="h-15 w-auto" />
           </Link>
 
           {/* القائمة الرئيسية للشاشات المتوسطة والكبيرة */}
