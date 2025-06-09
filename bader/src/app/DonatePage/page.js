@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -18,7 +19,8 @@ import { FaPaypal } from "react-icons/fa";
 import { useRef } from "react";
 import Script from "next/script";
 import Swal from "sweetalert2";
-
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 export default function DonatePage({ organizationId = null }) {
   const router = useRouter();
   const searchParams = useSearchParams();
