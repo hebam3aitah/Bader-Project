@@ -327,7 +327,7 @@ export default function AdminProjectsPage() {
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
-      title: "هل أنت متأكدة؟",
+      title: "هل أنت متأكد؟",
       text: "لا يمكنك التراجع بعد حذف المشروع!",
       icon: "warning",
       showCancelButton: true,
