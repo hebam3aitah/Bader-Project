@@ -1,4 +1,4 @@
-import { connectDB } from '@/lib/mongoose';
+import connectDB from "@/lib/db";
 import Category from '@/models/Category';
 
 export async function POST() {
