@@ -1,5 +1,5 @@
 
-import { connectDB } from '@/lib/mongoose';
+import connectDB from "@/lib/db";
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
