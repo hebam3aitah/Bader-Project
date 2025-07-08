@@ -2,7 +2,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { connectDB } from "@/lib/mongoose";
+import connectDB from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import Notification from "@/models/Notification"; // ⬅️ لإرسال إشعار ترحيبي
