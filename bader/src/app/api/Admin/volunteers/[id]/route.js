@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/mongoose";
+import connectDB from "@/lib/db";
 import Volunteer from "@/models/Volunteer";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
