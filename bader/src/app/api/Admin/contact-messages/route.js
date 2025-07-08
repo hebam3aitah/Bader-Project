@@ -1,7 +1,7 @@
 
 import { NextResponse } from "next/server";
 import ContactMessage from "@/models/ContactMessage";
-import { connectDB } from "@/lib/mongoose";
+import connectDB from "@/lib/db";
 import { sendReplyEmail } from "@/lib/email";
 
 export async function GET(req) {
