@@ -1,4 +1,4 @@
-import { connectDB } from "@/lib/mongoose";
+import connectDB from "@/lib/db";
 import TeamMember from "@/models/TeamMember";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,6 @@ export async function GET() {
   try {
     await connectDB();
     const members = await TeamMember.find();
-    console.log("members",members)
     return NextResponse.json(members);
   } catch (error) {
     return NextResponse.json({ message: "فشل في جلب البيانات", error }, { status: 500 });
