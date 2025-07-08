@@ -1,4 +1,4 @@
-import connectToDatabase from "../../../lib/connectDb";
+import connectDB from '@/lib/db';
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { cookies } from "next/headers";
@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request) {
   try {
-    const { db } = await connectToDatabase();
+    const { db } =await connectDB();
+
 
     // 1. استخراج بيانات النموذج
     const formData = await request.json();
