@@ -1,5 +1,5 @@
 // app/api/admin/convert-to-project/route.js
-import { connectDB } from "@/lib/mongoose";
+import connectDB from "@/lib/db";
 import Issue from "@/models/Issue";
 import Project from "@/models/Project";
 import Notification from "@/models/Notification";

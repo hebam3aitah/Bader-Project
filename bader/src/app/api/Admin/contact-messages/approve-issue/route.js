@@ -1,7 +1,7 @@
 // File: /app/api/admin/approve-issue/route.js
 
 import { NextResponse } from 'next/server';
-import { connectDB } from '@/lib/mongoose';
+import connectDB from "@/lib/db";
 import Issue from '@/models/Issue';
 import Project from '@/models/Project';
 import { getToken } from 'next-auth/jwt';
