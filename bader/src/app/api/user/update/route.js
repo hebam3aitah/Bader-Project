@@ -1,29 +1,5 @@
-// import{ connectDB} from '@/lib/mongoose'; // اتصال MongoDB
-// import User from '@/models/User';  // نموذج المستخدم
 
-// export async function PUT(req, res) {
-//   try {
-//     await connectDB();
-//     const { name, email, phone, age, profession, otp, image } = req.body;
-    
-//     // تحقق من التحقق عبر OTP هنا إذا كان تم إرسال OTP
-
-//     const updatedUser = await User.findByIdAndUpdate(req.user.id, {
-//       name,
-//       email,
-//       phone,
-//       age,
-//       profession,
-//       image, // ستحتاج إلى معالجة رفع الصورة على السيرفر باستخدام multer أو أي مكتبة مشابهة
-//     }, { new: true });
-
-//     res.status(200).json({ success: true, user: updatedUser });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ success: false, message: 'فشل التحديث' });
-//   }
-// }
-import { connectDB } from '@/lib/mongoose'; // اتصال MongoDB
+import connectDB from '@/lib/db'; 
 import User from '@/models/User';  // نموذج المستخدم
 import multer from 'multer';  // لتخزين الصور
 import path from 'path';

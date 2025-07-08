@@ -1,4 +1,4 @@
-import { connectDB } from '@/lib/mongoose';
+import connectDB from '@/lib/db'; 
 import Issue from '@/models/Issue';
 import { getToken } from 'next-auth/jwt';
 import jwt from 'jsonwebtoken';

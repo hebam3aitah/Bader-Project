@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongoose";
+import connectDB from '@/lib/db'; 
 import Organization from "@/models/Organization"; // تستخدم نفس الموديل
 
 export async function POST(req) {

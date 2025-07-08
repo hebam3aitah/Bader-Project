@@ -1,5 +1,5 @@
 
-import { connectDB } from '@/lib/mongoose';
+import connectDB from '@/lib/db'; 
 import Notification from '@/models/Notification';
 
 export async function PATCH(req, { params }) {

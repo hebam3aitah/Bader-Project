@@ -1,11 +1,6 @@
-import mongoose from "mongoose";
+import connectDB from '@/lib/db';
 import Project from "@/models/Project";
 import jwt from "jsonwebtoken";
-
-const connectDB = async () => {
-  if (mongoose.connection.readyState === 1) return;
-  await mongoose.connect(process.env.MONGODB_URI);
-};
 
 const verifyToken = (token) => {
   try {

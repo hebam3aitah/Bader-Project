@@ -1,4 +1,4 @@
-import connectDB from "@/lib/connectDb";
+import connectDB from '@/lib/db'; 
 import Issue from "@/models/Issue";
 import Joi from "joi";
 import { sendAdminNotification } from "@/lib/notifyAdmin";

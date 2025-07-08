@@ -1,4 +1,4 @@
-import { connectDB } from '@/lib/mongoose';
+import connectDB from '@/lib/db'; 
 import Project from '@/models/Project';
 import Issue from '@/models/Issue';
 import User from '@/models/User';

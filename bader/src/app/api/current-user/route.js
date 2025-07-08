@@ -1,6 +1,6 @@
 import { getToken } from "next-auth/jwt";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { connectDB } from "@/lib/mongoose";
+import connectDB from '@/lib/db'; 
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
 

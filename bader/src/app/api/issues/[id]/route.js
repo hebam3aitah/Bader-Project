@@ -1,5 +1,5 @@
 // ✅ /app/api/issues/[id]/route.js
-import { connectDB } from "@/lib/mongoose";
+import connectDB from '@/lib/db'; 
 import Issue from "@/models/Issue";
 import { NextResponse } from "next/server";
 

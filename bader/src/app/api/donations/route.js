@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongoose";
+import connectDB from '@/lib/db'; 
 import Donation from "@/models/Donation";
 import Project from "@/models/Project";
 import Organization from "@/models/Organization";
